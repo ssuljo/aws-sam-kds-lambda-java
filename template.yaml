@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-kinesis-lambda-java
+
+  Sample SAM Template for sam-kinesis-lambda-java
+
+Parameters:
+  KinesisStreamName:
+    Type: String
+
+Resources:
+  KinesisEventsStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: !Ref KinesisStreamName
+      ShardCount: 2
+
+  EventsConsumerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: kinesis-lambda-consumer
+      Handler: com.demo.kinesis.EventsConsumer::handleRequest
+      Runtime: java17
+      Timeout: 60
+      MemorySize: 512
+      Events:
+        StreamRecordsBatch:
+          Type: Kinesis
+          Properties:
+            Stream: !GetAtt KinesisEventsStream.Arn
+            BatchSize: 20
+            MaximumBatchingWindowInSeconds: 45
+            StartingPosition: TRIM_HORIZON
+            MaximumRetryAttempts: 3
+            Enabled: true
+            BisectBatchOnFunctionError: true
