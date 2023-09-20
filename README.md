@@ -19,6 +19,7 @@ This AWS Lambda Kinesis Consumer is an alternative variation of the [consumer bu
 | **Monitoring and Logging**              | Custom configuration and monitoring                | Integrated with AWS CloudWatch              |
 | **Cost Consideration**                  | Potential EC2 instance costs                      | Pay-as-you-go pricing with Lambda            |
 | **Use Case**                            | Complex processing, custom requirements           | Real-time event processing, ease of deployment |
+
 **Java KCL Consumer:**
 
 - Suitable for complex processing requirements.
@@ -77,6 +78,21 @@ The first command will build the source of the application. The second command w
 * **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
 * **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
 
+
+## Deployment Output
+
+After successfully deploying the AWS Lambda Kinesis Consumer using the `sam deploy` command, you will see output similar to the following:
+![successful_deployment](./images/successful_deployment.jpg)
+
+Here's a breakdown of what each line represents:
+
+- `AWS::IAM::Role`: The IAM role created for the Lambda function.
+- `AWS::Kinesis::Stream`: The Amazon Kinesis stream used by the application.
+- `AWS::Lambda::Function`: The AWS Lambda function itself.
+- `AWS::Lambda::EventSourceMapping`: The event source mapping between the Lambda function and the Kinesis stream.
+- `AWS::CloudFormation::Stack`: The AWS CloudFormation stack that includes all the deployed resources.
+
+This output confirms that the deployment was successful, and all the necessary resources have been created in your AWS environment.
 ## Usage
 
 The AWS Lambda function (EventsConsumer) will automatically consume cart abandonment events from the specified Kinesis stream. You can view the processed events in the AWS Lambda logs.
